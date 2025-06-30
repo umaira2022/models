@@ -15,12 +15,14 @@ poll_data <- tibble(biden = as.factor(c(rep("Yes", 655),
 
 ```
 Predicting voter preferences is a common task in political data science, often involving binary outcomes like yes/no responses. This analysis uses a March 2024 poll of 1,559 respondents to estimate the proportion of voters who would support Joe Biden in the upcoming presidential election.
-We model voter support for Joe Biden (a binary outcome of “Yes” or “No”) as a logistic function of no additional covariates, essentially estimating overall probability via a single‐parameter intercept model.
+
 
 ```{r}
-library(tidymodels)
+suppressPackageStartupMessages(
+  library(tidymodels))
 library(broom)
  library(gt)
+ library(marginaleffects)
 
 ```
 $$P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n)}}$$
@@ -55,7 +57,7 @@ tidy(fit_biden$fit, conf.int = TRUE) %>%
   select(term, estimate, conf.low, conf.high) %>%
   gt() %>%
   fmt_number(
-    columns = vars(estimate, conf.low, conf.high),
+    columns = c(estimate, conf.low, conf.high),
     decimals = 2
   ) %>%
   cols_label(
@@ -68,3 +70,23 @@ tidy(fit_biden$fit, conf.int = TRUE) %>%
     title = md("**Logistic Regression Coefficients**")
   )
 ```
+We model voter support for Joe Biden (a binary outcome of “Yes” or “No”) as a logistic function of no additional covariates, essentially estimating overall probability via a single‐parameter intercept model.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(marginaleffects)
+
+avg_predictions(fit_biden, type = "prob") %>%
+  filter(group == "Yes") %>%
+  ggplot(aes(x = group, y = estimate, ymin = conf.low, ymax = conf.high)) +
+  geom_pointrange(size = 1.2) +
+  labs(
+    x = "Response",
+    y = "Predicted Probability",
+    title = "Average Predicted Probability of Voting for Biden",
+    subtitle = "With 95% Confidence Interval"
+  ) +
+  theme_minimal()
+```
+We estimate that 42% of voters would support Biden, with a 95% confidence interval of approximately 38% to 47%.

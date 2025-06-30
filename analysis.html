@@ -92,29 +92,7 @@ window.Quarto = {
 </header>
 
 
-<p>Predicting voter preferences is a common task in political data science, often involving binary outcomes like yes/no responses. This analysis uses a March 2024 poll of 1,559 respondents to estimate the proportion of voters who would support Joe Biden in the upcoming presidential election. We model voter support for Joe Biden (a binary outcome of “Yes” or “No”) as a logistic function of no additional covariates, essentially estimating overall probability via a single‐parameter intercept model.</p>
-<div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching packages ────────────────────────────────────── tidymodels 1.3.0 ──</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>✔ broom        1.0.8     ✔ rsample      1.3.0
-✔ dials        1.4.0     ✔ tune         1.3.0
-✔ infer        1.0.8     ✔ workflows    1.2.0
-✔ modeldata    1.4.0     ✔ workflowsets 1.1.1
-✔ parsnip      1.3.2     ✔ yardstick    1.3.2
-✔ recipes      1.3.1     </code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-✖ scales::discard() masks purrr::discard()
-✖ dplyr::filter()   masks stats::filter()
-✖ recipes::fixed()  masks stringr::fixed()
-✖ dplyr::lag()      masks stats::lag()
-✖ yardstick::spec() masks readr::spec()
-✖ recipes::step()   masks stats::step()</code></pre>
-</div>
-</div>
+<p>Predicting voter preferences is a common task in political data science, often involving binary outcomes like yes/no responses. This analysis uses a March 2024 poll of 1,559 respondents to estimate the proportion of voters who would support Joe Biden in the upcoming presidential election.</p>
 <p><span class="math display">\[P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n)}}\]</span></p>
 <p>However, our model’s accuracy depends on assumptions like stability and representativeness, which may be violated if voter preferences change over time or if the survey sample does not reflect the actual voting population.</p>
 <p><span class="math display">\[
@@ -124,10 +102,6 @@ window.Quarto = {
 \widehat{p} = \frac{1}{1 + e^{-(-0.32)}} \approx 0.42
 \]</span></p>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Since gt v0.3.0, `columns = vars(...)` has been deprecated.
-• Please use `columns = c(...)` instead.</code></pre>
-</div>
 <div class="cell-output-display">
 <div id="tjzfysyhrd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#tjzfysyhrd table {
@@ -604,6 +578,17 @@ window.Quarto = {
 </div>
 </div>
 </div>
+<p>We model voter support for Joe Biden (a binary outcome of “Yes” or “No”) as a logistic function of no additional covariates, essentially estimating overall probability via a single‐parameter intercept model.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="analysis_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We estimate that 42% of voters would support Biden, with a 95% confidence interval of approximately 38% to 47%.</p>
 
 </main>
 <!-- /main column -->
