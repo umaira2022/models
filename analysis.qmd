@@ -15,12 +15,56 @@ poll_data <- tibble(biden = as.factor(c(rep("Yes", 655),
 
 ```
 Predicting voter preferences is a common task in political data science, often involving binary outcomes like yes/no responses. This analysis uses a March 2024 poll of 1,559 respondents to estimate the proportion of voters who would support Joe Biden in the upcoming presidential election.
-However, our model’s accuracy depends on assumptions like stability and representativeness, which may be violated if voter preferences change over time or if the survey sample does not reflect the actual voting population.
-
+We model voter support for Joe Biden (a binary outcome of “Yes” or “No”) as a logistic function of no additional covariates, essentially estimating overall probability via a single‐parameter intercept model.
 
 ```{r}
 library(tidymodels)
 library(broom)
+ library(gt)
 
 ```
 $$P(Y = 1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots + \beta_n X_n)}}$$
+
+However, our model’s accuracy depends on assumptions like stability and representativeness, which may be violated if voter preferences change over time or if the survey sample does not reflect the actual voting population.
+
+$$
+\log\left(\frac{\hat{p}}{1-\hat{p}}\right) = -0.32
+$$
+
+$$
+\widehat{p} = \frac{1}{1 + e^{-(-0.32)}} \approx 0.42
+$$
+
+
+
+```{r}
+#| cache: true
+fit_biden <- logistic_reg() |> 
+  fit(biden ~ 1, data = poll_data)
+```
+
+
+```{r}
+# library(gt)
+
+# extract only term, estimate and 95% CI
+library(broom)
+library(gt)
+
+tidy(fit_biden$fit, conf.int = TRUE) %>%
+  select(term, estimate, conf.low, conf.high) %>%
+  gt() %>%
+  fmt_number(
+    columns = vars(estimate, conf.low, conf.high),
+    decimals = 2
+  ) %>%
+  cols_label(
+    term      = "Parameter",
+    estimate  = "Estimate",
+    conf.low  = "2.5% CI",
+    conf.high = "97.5% CI"
+  ) %>%
+  tab_header(
+    title = md("**Logistic Regression Coefficients**")
+  )
+```
