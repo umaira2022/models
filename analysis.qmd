@@ -1,5 +1,18 @@
 ---
 title: "Biden Polling"
 format: html
+execute: 
+  echo: false
 ---
+
+
+```{r}
+#| message: false
+library(tidyverse)
+poll_data <- tibble(biden = as.factor(c(rep("Yes", 655), 
+                                        rep("No", 904)))) |> 
+                slice_sample(prop = 1)
+
+```
+Predicting voter preferences is a common task in political data science, often involving binary outcomes like yes/no responses. This analysis uses a March 2024 poll of 1,559 respondents to estimate the proportion of voters who would support Joe Biden in the upcoming presidential election.
 
